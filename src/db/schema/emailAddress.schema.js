@@ -28,10 +28,11 @@ export const getEmailByEmail = `--sql
       AND isArchived = 0;
 ;`;
 
-export const getEmailByUserId = `--sql
+export const getValidEmailByUserId = `--sql
   SELECT * FROM email_address 
     WHERE userId = @userId
-      AND isArchived = 0;
+      AND isArchived = 0
+      AND isValidated = 1;
 ;`;
 
 export const getEmailByToken = `--sql

@@ -5,6 +5,7 @@ export const makeCookieConf = (minutes) =>
     secure: process.env.NODE_ENV !== 'development',
     expires: new Date(Date.now() + 1000 * 60 * minutes),
     httpOnly: true,
+    sameSite: true,
   });
 
 export const makeErrorCookie = (name, errors) =>

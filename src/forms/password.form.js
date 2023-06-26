@@ -1,4 +1,5 @@
 export const getPasswordFormConfig = ({
+  email,
   formError,
   passwordError,
   confirmPasswordError,
@@ -8,6 +9,12 @@ export const getPasswordFormConfig = ({
     submitLabel: 'Set Password',
     action: 'password',
     inputs: [
+      {
+        name: 'email',
+        type: 'hidden',
+        value: email,
+        error: null,
+      },
       {
         name: 'password',
         type: 'password',

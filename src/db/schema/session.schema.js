@@ -17,6 +17,12 @@ export const activeSessionIndex = `--sql
     ON session(userId) WHERE isValid = 1;
 `;
 
+export const getSessionByKey = `--sql
+  SELECT * FROM session 
+    WHERE sessionKey = @sessionKey
+    AND isValid = 1;
+`;
+
 export const createSession = `--sql
   INSERT INTO session 
     (sessionKey, userId, createdAt, expiresAt) 

@@ -3,13 +3,27 @@ import { randomUUID } from 'crypto';
 import url from 'url'
 
 // import { validateMatching, validatePassword } from '#validators/password.validator.js';
+import { createUser } from '#db/schema/user.schema.js';
 
 import { objAppend } from '#util/object.js';
-import { isoNow, isoNowPlusMinutes } from '#util/datetime.js';
 
-import { attachToUserId, createOrphanEmail, getEmailByToken, setIsValidated } from '#db/schema/emailAddress.schema.js';
-import { createUser, createUserWithPassword, getUserById } from '#db/schema/user.schema.js';
-import { createSession } from '#db/schema/session.schema.js';
+import {
+  getValidEmailByUserId,
+  createOrphanEmail,
+  getEmailByToken,
+  attachToUserId,
+  setIsValidated,
+} from '#db/schema/emailAddress.schema.js';
+
+import {
+  getSessionByKey,
+  createSession,
+} from '#db/schema/session.schema.js';
+
+import {
+  isoNowPlusMinutes,
+  isoNow,
+} from '#util/datetime.js';
 
 function tokenUrl(req, token) {
   return url.format({
@@ -73,13 +87,23 @@ export const makeUserService = (di) => {
     return {};
   };
 
-  const validateEmail = ({ validationToken }, req) => {
-    // console.log({ validationToken })
+  const validateEmail = ({ validationToken }, _req) => {
     const email = db
       .prepare(getEmailByToken)
       .get({ validationToken });
 
+    console.log({ validationToken, email })
+
     if (!email) { return 'token is invalid'; }
+
+    // const { changes: validationChanges } = db.prepare(setIsValidated).run({
+    //   emailId: email.id,
+    //   emailValidatedAt: isoNow()
+    // })
+
+    // console.log({ validationChanges })
+
+    // if(validationChanges === 0){return 'could not mark email validated'}
 
     let userId = email.userId
 
@@ -109,6 +133,8 @@ export const makeUserService = (di) => {
       expiresAt,
     })
 
+    console.log({ changes, sessionKey })
+
     if (changes === 0) { return 'session could not be created' }
 
     return {
@@ -117,8 +143,23 @@ export const makeUserService = (di) => {
     }
   }
 
+  const validateSession = (sessionKey) => {
+    const session = db.prepare(getSessionByKey).get({ sessionKey });
+    if (!session) {
+      return 'invalid session key';
+    }
+
+    const now = isoNow();
+    if (session.expiresAt < now) {
+      return 'session expired; need new password reset email and key';
+    }
+
+    return true;
+  }
+
   return {
     create,
     validateEmail,
+    validateSession,
   };
 };
