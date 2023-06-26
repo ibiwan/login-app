@@ -1,0 +1,57 @@
+button {
+  margin: 5px;
+}
+
+.linkbar {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+#footer {
+  font-size: smaller;
+}
+
+.box {
+  border: 1px solid black;
+  width: min-content;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+input {
+  width: 15em;
+}
+
+input.submit {
+  margin-top: 5px;
+  width: min-content;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: max-content min-content;
+}
+
+label {
+  align-self: end;
+}
+
+.error {
+  color: red;
+}
+
+.formItem {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}

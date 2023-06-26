@@ -1,0 +1,6 @@
+html 
+  | Thanks! You should validate your email.
+  | You have until #{validationExpiresAt} to use this link.
+  | #{validationToken}
+  | visit #{validationLink} in your browser
+  a(href=validationLink) or just click

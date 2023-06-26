@@ -1,0 +1,16 @@
+html
+  head
+    title Manige Yo Seff
+    link(rel='stylesheet', href='css/main.css')
+    block scripts 
+  body 
+    block content 
+    if links
+      .linkbar
+      | or: 
+      each link of links
+        a(href=link.href)
+          button=link.text
+    block foot 
+      #footer 
+        p Courtesy Of Login Inc

@@ -1,0 +1,96 @@
+{
+  "name": "bare-chips",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "nodemon src/index.js --debug",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "imports": {
+    "#validators/*.js": "./src/validators/*.js",
+    "#handlers/*.js": "./src/handlers/*.js",
+    "#services/*.js": "./src/services/*.js",
+    "#routes/*.js": "./src/routes/*.js",
+    "#views/*.js": "./src/views/*.js",
+    "#forms/*.js": "./src/forms/*.js",
+    "#util/*.js": "./src/util/*.js",
+    "#db/*.js": "./src/db/*.js"
+  },
+  "eslintConfig": {
+    "plugins": [
+      "import"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2022
+    },
+    "settings": {
+      "import/resolver": {
+        "jsconfig": {
+          "config": "jsconfig.json"
+        }
+      }
+    },
+    "extends": [
+      "eslint:recommended",
+      "airbnb"
+    ],
+    "rules": {
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          ".js": "never"
+        }
+      ],
+      "import/prefer-default-export": [
+        "off"
+      ],
+      "no-unused-vars": [
+        "error",
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_"
+        }
+      ],
+      "no-underscore-dangle": "off",
+      "implicit-arrow-linebreak": [
+        "error",
+        "below"
+      ],
+      "indent": [
+        "error",
+        2
+      ]
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "awilix": "^8.0.1",
+    "axios": "^1.4.0",
+    "bcrypt": "^5.1.0",
+    "better-sqlite3": "^8.4.0",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "email-validator": "^2.0.4",
+    "eslint-import-resolver-jsconfig": "^1.1.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "pug": "^3.0.2"
+  },
+  "maybeDependencies": {
+    "awilix": "^8.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.42.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "nodemon": "^2.0.22"
+  }
+}

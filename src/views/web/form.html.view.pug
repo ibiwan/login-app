@@ -1,0 +1,16 @@
+extends html.layout.pug 
+
+block content
+  h3=formTitle
+  each error of formError || []
+    .error=error
+
+  form(action=action method="post")
+    .formGrid
+      each input of inputs || []
+        label(for=input.name) #{titleize(input.name)}:
+        .formItem
+          each error of input.error || []
+            .error=error
+          input(type=input.type id=input.name name=camelize(input.name))
+      input.submit(type="submit" value=submitLabel)
