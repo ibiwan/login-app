@@ -6,14 +6,10 @@
     "moduleResolution": "nodenext",
     "target": "ES2022",
     "paths": {
-      "#validators/*": ["./src/validators/*"],
-      "#handlers/*": ["./src/handlers/*"],
-      "#services/*": ["./src/services/*"],
-      "#routes/*": ["./src/routes/*"],
-      "#forms/*": ["./src/forms/*"],
-      "#views/*": ["./src/views/*"],
-      "#util/*": ["./src/util/*"],
-      "#db/*/*": ["./src/db/*"]
+      "#express/*": ["./src/express/*"],
+      "#feature/*": ["./src/feature/*"],
+      "#service/*": ["./src/service/*"],
+      "#util/*": ["./src/util/*"]
     }
   }
 }

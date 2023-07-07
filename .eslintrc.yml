@@ -1,0 +1,35 @@
+plugins:
+  - import
+parserOptions:
+  ecmaVersion: 2022
+settings:
+  import/resolver:
+    jsconfig:
+      config: jsconfig.json
+extends:
+  - eslint:recommended
+  - airbnb
+overrides:
+  files:
+    - "**/*.e2e.js"
+  env:
+    jest: true
+rules:
+  import/extensions:
+  - error
+  - ignorePackages
+  - .js: never
+  import/prefer-default-export:
+    - off
+  no-unused-vars:
+    - error
+    - argsIgnorePattern: ^_
+      varsIgnorePattern: ^_
+      caughtErrorsIgnorePattern: ^_
+  no-underscore-dangle: off
+  implicit-arrow-linebreak:
+    - error
+    - below
+  indent:
+    - error
+    - 2

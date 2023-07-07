@@ -1,0 +1,32 @@
+extends html.layout.pug 
+
+block content
+  h3=formTitle
+  block errors
+
+  form(action=action method="post")
+    .formGrid
+      each input of inputs || []
+        if input.type === 'hidden'
+          input(
+            type=input.type 
+            id=input.name 
+            name=camelize(input.name)
+            value=input.value
+          )
+        else
+          label(for=input.name) #{titleize(input.name)}:
+          .formItem
+            each error of input.errors || []
+              .error=error
+            input(
+              type=input.type 
+              id=input.name 
+              name=camelize(input.name)
+              value=input.value
+            )
+      input.submit(type="submit" value=submitLabel)
+
+block errors
+  each error of formErrors || []
+    .error=error

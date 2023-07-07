@@ -5,66 +5,14 @@
   "main": "src/index.js",
   "scripts": {
     "start": "nodemon src/index.js --debug",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "type": "module",
   "imports": {
-    "#validators/*.js": "./src/validators/*.js",
-    "#handlers/*.js": "./src/handlers/*.js",
-    "#services/*.js": "./src/services/*.js",
-    "#routes/*.js": "./src/routes/*.js",
-    "#views/*.js": "./src/views/*.js",
-    "#forms/*.js": "./src/forms/*.js",
-    "#util/*.js": "./src/util/*.js",
-    "#db/*.js": "./src/db/*.js"
-  },
-  "eslintConfig": {
-    "plugins": [
-      "import"
-    ],
-    "parserOptions": {
-      "ecmaVersion": 2022
-    },
-    "settings": {
-      "import/resolver": {
-        "jsconfig": {
-          "config": "jsconfig.json"
-        }
-      }
-    },
-    "extends": [
-      "eslint:recommended",
-      "airbnb"
-    ],
-    "rules": {
-      "import/extensions": [
-        "error",
-        "ignorePackages",
-        {
-          ".js": "never"
-        }
-      ],
-      "import/prefer-default-export": [
-        "off"
-      ],
-      "no-unused-vars": [
-        "error",
-        {
-          "argsIgnorePattern": "^_",
-          "varsIgnorePattern": "^_",
-          "caughtErrorsIgnorePattern": "^_"
-        }
-      ],
-      "no-underscore-dangle": "off",
-      "implicit-arrow-linebreak": [
-        "error",
-        "below"
-      ],
-      "indent": [
-        "error",
-        2
-      ]
-    }
+    "#express/*.js": "./src/express/*.js",
+    "#feature/*.js": "./src/feature/*.js",
+    "#service/*.js": "./src/service/*.js",
+    "#util/*.js": "./src/util/*.js"
   },
   "author": "",
   "license": "ISC",
@@ -83,14 +31,14 @@
     "jsonwebtoken": "^9.0.0",
     "pug": "^3.0.2"
   },
-  "maybeDependencies": {
-    "awilix": "^8.0.1"
-  },
   "devDependencies": {
-    "eslint": "^8.42.0",
+    "@types/jest": "^29.5.2",
+    "eslint": "^8.44.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
-    "nodemon": "^2.0.22"
+    "jest": "^29.5.0",
+    "nodemon": "^2.0.22",
+    "supertest": "^6.3.3"
   }
 }
