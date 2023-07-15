@@ -12,10 +12,8 @@ export const makeSessionRepo = (di) => {
   return {
     /** @param {{sessionKey, userId, createdAt, expiresAt}} data */
     createSession: (data) => db.prepare(insertSession).run(data),
-
     /** @param {{sessionKey}} data */
     getSessionByKey: (data) => db.prepare(selectSessionByKey).get(data),
-
     /** @param {{invalidatedAt, sessionKey}} data */
     invalidateSessionByKey: (data) => db.prepare(invalidateSessionByKey).run(data),
     /** @param {{invalidatedAt, userId}} data */

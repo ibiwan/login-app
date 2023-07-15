@@ -8,10 +8,10 @@ export const getErrorableForm = (
 ) =>
   (req, res, _next) => {
     const {
-      di: { cookieService: { extractCookie } },
-      reqDi: {
+      di: {
+        cookieService: { extractCookie },
         validationService: { validateSessionKey },
-        errorService: { hasErrors, getErrors }
+        errorService: { hasErrors }
       },
     } = req.context;
 
@@ -23,12 +23,12 @@ export const getErrorableForm = (
       },
     );
 
-    const formErrors = extractCookie(errorCookieName);
+    const formErrors = extractCookie(req, errorCookieName);
 
     res.clearCookie(errorCookieName);
 
     if (sessionCookieName) {
-      const { sessionKey } = extractCookie(sessionCookieName);
+      const { sessionKey } = extractCookie(req, sessionCookieName);
       validateSessionKey(sessionKey);
     }
 
@@ -47,10 +47,10 @@ export const postErrorableForm = (
 ) =>
   (req, res) => {
     const {
-      context: { reqDi },
+      context: { di },
     } = req;
 
-    const { errorService: { hasErrors, getErrors } } = reqDi
+    const { errorService: { hasErrors, getErrors } } = di
 
     contextify(
       req,
@@ -60,7 +60,7 @@ export const postErrorableForm = (
       },
     );
 
-    const method = di2method(reqDi);
+    const method = di2method(di);
     const result = method(req.body, req);
 
     if (result) {

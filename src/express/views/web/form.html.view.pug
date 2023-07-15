@@ -2,7 +2,9 @@ extends html.layout.pug
 
 block content
   h3=formTitle
-  block errors
+
+  each error of formErrors || []
+    .error=error
 
   form(action=action method="post")
     .formGrid
@@ -26,7 +28,3 @@ block content
               value=input.value
             )
       input.submit(type="submit" value=submitLabel)
-
-block errors
-  each error of formErrors || []
-    .error=error

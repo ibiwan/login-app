@@ -7,13 +7,14 @@ export const makeErrorService = () => {
     }
   };
 
-  const getErrors = () =>
-    errors;
+  const getErrors = () => {
+    return errors;
+  }
 
   const hasErrors = () =>
     errors.length > 0;
 
   return {
-     addErrors, getErrors, hasErrors,
+    addErrors, getErrors, hasErrors,
   };
 };

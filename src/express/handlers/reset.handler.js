@@ -1,3 +1,3 @@
-export const getValidateReset = () => {
-
+export const getValidateReset = (req, res) => {
+  res.json(true)
 };

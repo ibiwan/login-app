@@ -1,3 +1,3 @@
 import { makeApp } from '#express/app.js';
 
-const {app} = makeApp();
+const { app, dbService } = makeApp();

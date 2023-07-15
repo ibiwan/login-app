@@ -16,9 +16,10 @@ import {
 import {
   userTable,
 } from '#feature/user/sql/user.schema.js';
+import { preloadData } from '#service/preload.service.js';
 
 export const makeDbService = (di) => {
-  const { options: { db: dbOptions } } = di
+  const { options, options: { db: dbOptions } } = di
 
   const {
     useInMemory = false
@@ -33,6 +34,12 @@ export const makeDbService = (di) => {
   db.exec(userTable);
 
   db.exec(activeSessionIndex);
+
+  try {
+    preloadData(options, db)
+  } catch (err) {
+    console.log('Error Preloading Data', { err })
+  }
 
   return { db };
 };

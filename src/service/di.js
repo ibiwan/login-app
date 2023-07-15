@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import { makeDbService } from '#service/db.service.js';
 import { makeErrorService } from '#service/error.service.js';
-import { makePreloadService } from '#service/preload.service.js';
+
 import { makeDateTimeService } from '#service/dateTime.service.js';
 import { makeCookieService } from '#feature/cookie/cookie.service.js';
 import { makeValidationService } from '#service/validation.service.js';
@@ -29,15 +29,14 @@ import { makeUserService } from '#feature/user/user.service.js';
 
 export const makeContainer = (options = {}) => {
   const {
-    overridePermRegistrations = {},
-    overrideReqRegistrations = {},
+    overrideRegistrations = {},
   } = options;
 
   const container = awilix.createContainer({
     injectionMode: awilix.InjectionMode.PROXY,
   });
 
-  const permRegistrations = {
+  const registrations = {
     jobQueueService: awilix.asFunction(makeJobQueueService).singleton(),
 
     sessionRepo: awilix.asFunction(makeSessionRepo).singleton(),
@@ -50,44 +49,36 @@ export const makeContainer = (options = {}) => {
     mailerService: awilix.asFunction(makeMailerService).singleton(),
     cookieService: awilix.asFunction(makeCookieService).singleton(),
     dbService: awilix.asFunction(makeDbService).singleton(),
+    
     httpService: awilix.asValue(axios),
     cryptoService: awilix.asValue(crypto),
     options: awilix.asValue(options),
-  }
 
-  const reqRegistrations = {
     passwordService: awilix.asFunction(makePasswordService).scoped(),
     sessionService: awilix.asFunction(makeSessionService).scoped(),
     emailService: awilix.asFunction(makeEmailService).scoped(),
     userService: awilix.asFunction(makeUserService).scoped(),
 
     validationService: awilix.asFunction(makeValidationService).scoped(),
-    preloadService: awilix.asFunction(makePreloadService).scoped(),
     errorService: awilix.asFunction(makeErrorService).scoped(),
   }
-
-  container.register({
-    ...permRegistrations,
-    ...overridePermRegistrations,
-  });
-
-  const permDi = container.cradle;
 
   const diMiddleware = (req, _res, next) => {
     const reqScope = container.createScope()
 
     reqScope.register({
-      ...reqRegistrations,
-      ...overrideReqRegistrations
+      ...registrations,
+      ...overrideRegistrations
     })
 
-    req.context.di = container.cradle;
-    req.context.reqDi = reqScope.cradle;
-
-    req.context.reqDi.preloadService; // access to preload data
+    req.context.di = reqScope.cradle;
 
     next();
+
+    return reqScope.cradle.dbService
   };
 
-  return { diMiddleware, permDi }
+  const dbService = diMiddleware({ context: {} }, null, () => { });
+
+  return { diMiddleware, dbService }
 };

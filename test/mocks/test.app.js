@@ -4,8 +4,7 @@ export const makeTestApp = ({
   app = null,
   db = null,
   preload = null,
-  overridePermRegistrations = null,
-  overrideReqRegistrations = null,
+  overrideRegistrations = null,
 }) => {
   return makeApp({
     app: {
@@ -19,11 +18,8 @@ export const makeTestApp = ({
     preload: {
       ...preload,
     },
-    overridePermRegistrations: {
-      ...overridePermRegistrations,
-    },
-    overrideReqRegistrations: {
-      ...overrideReqRegistrations,
+    overrideRegistrations: {
+      ...overrideRegistrations,
     },
   })
 }

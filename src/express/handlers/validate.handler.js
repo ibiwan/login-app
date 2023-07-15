@@ -1,11 +1,10 @@
 import { passwordSessionCookieName, passwordUrl } from '#express/handlers/password.handler.js';
 
 export const getValidateEmail = (req, res) => {
-
   const {
     params: { emailValidationToken: validationToken },
     context: {
-      reqDi: {
+      di: {
         cookieService: { makeSessionCookie },
         emailService: { setEmailValidated },
       },

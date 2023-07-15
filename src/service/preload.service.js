@@ -1,20 +1,22 @@
-export const makePreloadService = (di) => {
-  const { options: { preload } } = di
+import { makeEmailRepo } from '#feature/email/sql/email.repo.js';
+
+export const preloadData = (options, db) => {
+  const { preload } = options
 
   const prepopulateEmail = (emailsData) => {
-    const { emailRepo: { createOrphanEmail, setValidationTokenSent } } = di;
+    const { createOrphanEmail, setValidationTokenSent } = makeEmailRepo({ dbService: { db } })
     emailsData.forEach(emailData => {
       const { validationEmailSentAt, ...rest } = emailData
-      const {lastInsertRowid:emailId} = createOrphanEmail(rest)
-      
+      const { lastInsertRowid: emailId } = createOrphanEmail(rest)
+
       if (validationEmailSentAt) {
-        setValidationTokenSent({emailId, validationSentAt:validationEmailSentAt})
+        setValidationTokenSent({ emailId, validationSentAt: validationEmailSentAt })
       }
     }
     )
   }
 
-  const prepopulateData = (data) => {
+  const prepopulateData = (data = {}) => {
     for (const [key, val] of Object.entries(data)) {
       switch (key) {
         case 'emailAddress':
@@ -26,7 +28,5 @@ export const makePreloadService = (di) => {
     }
   }
 
-  if (preload) { prepopulateData(preload) }
-
-  return {}
+  prepopulateData(preload)
 }

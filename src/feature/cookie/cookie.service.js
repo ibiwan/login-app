@@ -43,8 +43,12 @@ export const makeCookieService = (di) => {
     makeCookieConf(10),
   ]);
 
-  const extractCookie = (req, cookieName) =>
-    fromJson(req?.cookies?.[cookieName]);
+  const extractCookie = (req, cookieName) => {
+    const cookies = req?.cookies
+    const text = cookies?.[cookieName];
+    const parsed = fromJson(text);
+    return parsed
+  }
 
   return { makeErrorCookie, makeSessionCookie, makeMessageCookie, extractCookie }
 }

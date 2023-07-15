@@ -4,14 +4,17 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 
-import { errorCookieMiddleware } from '#feature/cookie/errorCookie.mw.js';
 import { urlMiddleware } from '#express/middleware/url.mw.js';
 import { initView } from '#express/middleware/views.mw.js';
 import { router } from '#express/routes/routes.js';
 import { makeContainer } from '#service/di.js';
+import {
+  nonfatalErrorCookieMiddleware,
+  fatalErrorCookieMiddleware,
+} from '#feature/cookie/errorCookie.mw.js';
 
 export const makeApp = (options = {}) => {
-  const { diMiddleware, permDi } = makeContainer(options)
+  const { diMiddleware, dbService } = makeContainer(options)
 
   const { app: appOptions = {} } = options
   const { startListener = true } = appOptions
@@ -19,11 +22,6 @@ export const makeApp = (options = {}) => {
   const app = express();
 
   initView(app);
-
-  const stdErrorMW = (err, _req, _res, next) => {
-    console.error({ err })
-    next(err)
-  }
 
   app.use(
     express.static('public'),
@@ -33,12 +31,21 @@ export const makeApp = (options = {}) => {
     bodyParser.text(),
     bodyParser.raw(),
     cookieParser(),
+    function (req, res, next) {
+      // @ts-ignore
+      req.context = {
+        // @ts-ignore
+        ...req.context,
+        callId: Math.floor(Math.random() * 100)
+      }
+      next()
+    },
     urlMiddleware,
     diMiddleware,
-    errorCookieMiddleware,
-    // THEN the router
+
+    nonfatalErrorCookieMiddleware,
     router,
-    stdErrorMW,
+    fatalErrorCookieMiddleware,
   );
 
   if (startListener) {
@@ -49,5 +56,5 @@ export const makeApp = (options = {}) => {
     });
   }
 
-  return {app, permDi};
+  return { app, dbService };
 }

@@ -1,5 +1,5 @@
 {
   "testMatch": [
-    "<rootDir>/test/**/*validate*"
+    "<rootDir>/test/**/*.e2e.js"
   ]
 }

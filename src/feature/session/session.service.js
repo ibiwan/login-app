@@ -33,6 +33,7 @@ export const makeSessionService = (di) => {
   const invalidateSession = (sessionKey) => {
     const {
       errorService: { addErrors },
+      dateTimeService: { isoNow },
       sessionRepo: { invalidateSessionByKey },
     } = di;
 

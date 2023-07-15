@@ -1,3 +1,5 @@
+import { FatalError } from '#feature/cookie/errorCookie.mw.js';
+
 export const makeEmailService = (di) => {
   const createEmailWithoutUser = (email) => {
     const {
@@ -47,36 +49,50 @@ export const makeEmailService = (di) => {
       emailRepo: { getEmailByToken, setIsValidated, attachToUserId },
       userRepo: { createUser },
       dateTimeService: { isoNow },
+      errorService: { addErrors },
     } = di;
 
     const email = getEmailByToken({ validationToken });
-
-    if (!email) { return 'token is invalid'; }
+    if (!email) {
+      addErrors(['token is invalid'])
+      throw new FatalError();
+    }
 
     const { changes: validationChanges } = setIsValidated({
       emailId: email.id,
       emailValidatedAt: isoNow(),
     });
-
-    if (validationChanges === 0) { return 'could not mark email validated'; }
+    if (validationChanges === 0) {
+      addErrors(['could not mark email validated'])
+      throw new FatalError();
+    }
 
     let { userId } = email;
 
     if (userId == null) {
-      const { changes: userChanges, lastInsertRowid: newUserId } = createUser({
+      const {
+        changes: userChanges,
+        lastInsertRowid: newUserId,
+      } = createUser({
         createdAt: isoNow(),
       });
 
-      if (userChanges > 0) {
-        userId = newUserId;
-        attachToUserId({
-          emailId: email.id,
-          userId: newUserId,
-        });
+      if (userChanges === 0) {
+        addErrors(['could not create user for email'])
+        throw new FatalError();
       }
+      userId = newUserId;
+
+      attachToUserId({
+        emailId: email.id,
+        userId,
+      });
     }
 
-    if (!userId) { return 'user could not be associated'; }
+    if (!userId) {
+      addErrors(['user could not be associated'])
+      throw new FatalError();
+    }
 
     const sessionKey = createPasswordSession(userId)
 

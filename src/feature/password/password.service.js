@@ -2,16 +2,16 @@ import { hashSync } from 'bcrypt';
 
 import { passwordSessionCookieName } from '#express/handlers/password.handler.js';
 
-export const makePasswordService = (reqDi) => {
+export const makePasswordService = (di) => {
   const setValidPassword = (
     userId,
     password,
   ) => {
     const {
       errorService: { addErrors },
-      userRepo: { setPasshash },
       dateTimeService: { isoNow },
-    } = reqDi;
+      userRepo: { setPasshash },
+    } = di;
 
     const passhash = hashSync(password, 14);
     const {
@@ -39,11 +39,14 @@ export const makePasswordService = (reqDi) => {
         validatePasswordSession,
         validatePasswords,
       },
+      cookieService: {
+        makeSessionCookie,
+        extractCookie,
+      },
       errorService: {
         hasErrors,
       },
-      cookieService: { extractCookie, makeSessionCookie },
-    } = reqDi;
+    } = di;
 
     validatePasswords(password, confirmPassword);
     if (hasErrors()) return false;
