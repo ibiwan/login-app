@@ -1,24 +1,15 @@
 import { getCreateFormConfig } from '#express/forms/create.form.config.js';
 
-import {
-  getErrorableForm,
-  postErrorableForm,
-} from '#express/forms/formHandlers.fn.js';
+export const getCreate = (req, res, _next) => {
+  res.render(
+    'web/form.html.view.pug',
+    getCreateFormConfig(),
+  );
+};
 
-const createUrl = '/create';
-const errorCookieName = 'createUserErrors';
+export const postCreate = (req, res) => {
+  const { context: { di }, } = req;
+  const { userService: { create } } = di
 
-const di2method = (di) =>
-  di.userService.create;
-
-export const getCreate = getErrorableForm(
-  errorCookieName,
-  createUrl,
-  getCreateFormConfig,
-);
-
-export const postCreate = postErrorableForm(
-  errorCookieName,
-  createUrl,
-  di2method,
-);
+  res.json(create(req.body, req))
+};

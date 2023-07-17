@@ -10,7 +10,7 @@ export const makeSessionRepo = (di) => {
   const { dbService: { db } } = di
 
   return {
-    /** @param {{sessionKey, userId, createdAt, expiresAt}} data */
+    /** @param {{sessionKey, userId, createdAt, expiresAt, isPassOnly}} data */
     createSession: (data) => db.prepare(insertSession).run(data),
     /** @param {{sessionKey}} data */
     getSessionByKey: (data) => db.prepare(selectSessionByKey).get(data),

@@ -27,8 +27,7 @@ export const makeEmailService = (di) => {
       return { validationExpiresAt, validationToken, emailId, emailAddedAt };
     } catch (e) {
       if (e.message.includes('UNIQUE constraint failed')) {
-        addErrors(['formErrors:could not create account'])
-        return null
+        throw new FatalError('email address is already in use')
       } else {
         throw e
       }
@@ -94,11 +93,12 @@ export const makeEmailService = (di) => {
       throw new FatalError();
     }
 
-    const sessionKey = createPasswordSession(userId)
+    const { sessionKey, minutes } = createPasswordSession(userId)
 
     return {
       email: email.email,
       sessionKey,
+      minutes,
     };
   };
 

@@ -1,16 +1,11 @@
 import express from 'express';
 
-import { getSuccess } from '#express/handlers/success.handler.js';
+import { getValidateEmail } from '#express/handlers/validate.handler.js';
+import { getValidateReset } from '#express/handlers/reset.handler.js';
+import { useSessionCookie } from '#express/middleware/session.mw.js';
 import { getIndex } from '#express/handlers/index.handler.js';
 import { getHome } from '#express/handlers/home.handler.js';
-
-import {
-  getValidateEmail,
-} from '#express/handlers/validate.handler.js';
-
-import {
-  getValidateReset,
-} from '#express/handlers/reset.handler.js';
+import { getLogout } from '#feature/session/logout.handler.js';
 
 import {
   getPassword,
@@ -35,19 +30,16 @@ import {
 export const router = express.Router();
 
 router.get('/', getIndex);
-router.get('/home', getHome);
-router.get('/success', getSuccess);
+router.get('/home', useSessionCookie(true), getHome);
 router.get('/reset/:passwordResetToken', getValidateReset);
 router.get('/validate/:emailValidationToken', getValidateEmail);
-
 router.get('/login', getLogin);
-router.post('/login', postLogin);
-
+router.get('/logout', useSessionCookie(false), getLogout);
 router.get('/create', getCreate);
-router.post('/create', postCreate);
-
 router.get('/forgot', getForgot);
-router.post('/forgot', postForgot);
+router.get('/password', useSessionCookie(false), getPassword);
 
-router.get('/password', getPassword);
-router.post('/password', postPassword);
+router.post('/create', postCreate);
+router.post('/forgot', postForgot);
+router.post('/login', postLogin);
+router.post('/password', useSessionCookie(false), postPassword);

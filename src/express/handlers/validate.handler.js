@@ -1,4 +1,4 @@
-import { passwordSessionCookieName, passwordUrl } from '#express/handlers/password.handler.js';
+import { passwordUrl } from '#express/handlers/password.handler.js';
 
 export const getValidateEmail = (req, res) => {
   const {
@@ -11,12 +11,17 @@ export const getValidateEmail = (req, res) => {
     },
   } = req;
 
-  const { sessionKey, email } = setEmailValidated({ validationToken }, req);
+  const {
+    sessionKey,
+    email,
+    minutes,
+  } = setEmailValidated({ validationToken }, req);
 
   res.cookie(...makeSessionCookie(
     { sessionKey, email },
-    15,
-    passwordSessionCookieName,
+    minutes,
+    'session',
   ));
   res.redirect(passwordUrl);
+  res.json({ success: true })
 };

@@ -1,0 +1,44 @@
+<html>
+
+<head>
+  <title>Manige Yo Seff</title>
+  <link rel="icon" href="data:;base64,=" />
+  <!-- <link rel="stylesheet" href="css/main.css" /> -->
+  <script defer="defer" src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body x-data="{
+      formTitle: 'Create Account',
+      formAction: ()=>{console.log('Form Submitted');},
+      formActionLabel: 'Create',
+      formErrors: ['ahab', 'baha'],
+      formFields: [
+        {name:'email',label:'Email:',type:'text',errors:['blah','halb']},
+      ],
+    }">
+  <h3 x-text="formTitle"></h3>
+  <form @submit.prevent="formAction">
+    <template x-for="formError in formErrors">
+      <div x-text="formError"></div>
+    </template>
+    <div class="formGrid">
+      <template x-for="formField in formFields">
+        <div class="formItem">
+          <label :for="formField.name" x-text="formField.label"></label>
+          <input :type="formField.type" :id="formField.name" :name="formField.name" />
+        </div>
+      </template>
+      <input class="submit" type="submit" :value="formActionLabel" />
+    </div>
+  </form>
+  <div class="linkbar">
+    or:
+    <div x-data="{ links: { login: 'login to existing', forgot: 'forgot password' } }">
+      <template x-for="[link, text] in Object.entries(links)">
+        <a x-bind:href="link"><button x-text="text"></button></a>
+      </template>
+    </div>
+  </div>
+</body>
+
+</html>

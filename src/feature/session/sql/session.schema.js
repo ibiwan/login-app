@@ -7,6 +7,7 @@ export const sessionTable = `--sql
     expiresAt TEXT NOT NULL,
     isValid INTEGER NOT NULL DEFAULT 1,
     invalidatedAt TEXT,
+    isPassOnly BOOLEAN NOT NULL DEFAULT 0,
 
     FOREIGN KEY (userId) REFERENCES user(id)
   );

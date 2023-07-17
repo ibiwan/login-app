@@ -1,7 +1,5 @@
 import { getValidator } from '#util/validation.fn.js';
 
-import { validateTempSession } from '#feature/session/session.validator.js';
-
 export const makeValidationService = (di) => {
   const validateAs = (validation) =>
     (...data) => {
@@ -26,13 +24,8 @@ export const makeValidationService = (di) => {
     validateAs('password-match')(password, confirmPassword);
   };
 
-  const validateTempSessionKey = (sessionKey, sessionEmail) => {
-    return validateTempSession(di)(sessionKey, sessionEmail);
-  };
-
   return {
     validateSessionKey,
-    validateTempSessionKey,
     validatePasswords,
     validateEmail,
   };

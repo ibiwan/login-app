@@ -1,7 +1,9 @@
 html
   head
     title Manige Yo Seff
-    link(rel='stylesheet', href='css/main.css')
+    block links
+      link(rel="icon", href="data:;base64,=")
+      link(rel='stylesheet', href='css/main.css')
     block scripts 
   body 
     block content 
@@ -11,6 +13,9 @@ html
       each link of links
         a(href=link.href)
           button=link.text
-    block foot 
+    h1(x-data="{ message: 'I ❤️ Alpen'}")
+      div(x-text="message")
+      
+  block foot 
       #footer 
         p Courtesy Of Login Inc

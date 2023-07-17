@@ -55,7 +55,6 @@ describe('GET /create without errors', () => {
 
 describe('GET /create with form errors', () => {
   let $
-  const cookieName = 'createUserErrors'
   const formLevelError = 'A FORM-LEVEL ERROR'
   const emailFieldError = 'AN EMAIL FIELD ERROR'
 

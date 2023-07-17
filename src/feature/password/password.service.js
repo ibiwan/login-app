@@ -1,7 +1,5 @@
 import { hashSync } from 'bcrypt';
 
-import { passwordSessionCookieName } from '#express/handlers/password.handler.js';
-
 export const makePasswordService = (di) => {
   const setValidPassword = (
     userId,
@@ -56,7 +54,7 @@ export const makePasswordService = (di) => {
       email: sessionEmail,
     } = extractCookie(
       req,
-      passwordSessionCookieName,
+      'session',
     );
 
     const {

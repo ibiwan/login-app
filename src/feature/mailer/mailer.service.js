@@ -57,7 +57,8 @@ export const makeMailerService = (di) => {
   }) => {
     const {
       jobQueueService: { setWasAttempted, setWasFailed, setWasSuccessful },
-      emailService: { getEmailByEmailId, setValidationEmailSentAt },
+      emailRepo: { getEmailByEmailId, },
+      emailService: { setValidationEmailSentAt },
     } = di;
 
     setWasAttempted(mailerId);

@@ -1,6 +1,6 @@
 
 export const makeSessionService = (di) => {
-  const createLoginSession = (userId, minutes = 300) => {
+  const createLoginSession = (userId, minutes = 300, isPassOnly = false) => {
     const {
       errorService: { addErrors },
       sessionRepo: { createSession },
@@ -9,15 +9,18 @@ export const makeSessionService = (di) => {
     } = di;
     const sessionKey = randomUUID();
 
-    const {
-      changes: sessionChanges,
-      lastInsertRowid: _newSessionId,
-    } = createSession({
+    const config = {
       userId,
       sessionKey,
       createdAt: isoNow(),
       expiresAt: isoNowPlusMinutes(minutes),
-    });
+      isPassOnly: isPassOnly ? 1 : 0,
+    }
+
+    const {
+      changes: sessionChanges,
+      lastInsertRowid: _newSessionId,
+    } = createSession(config);
 
     if (sessionChanges === 0) {
       addErrors(['session could not be created']);
@@ -25,10 +28,10 @@ export const makeSessionService = (di) => {
       return null;
     }
 
-    return sessionKey;
+    return { sessionKey, minutes };
   }
 
-  const createPasswordSession = (userId) => createLoginSession(userId, 15);
+  const createPasswordSession = (userId) => createLoginSession(userId, 15, true);
 
   const invalidateSession = (sessionKey) => {
     const {
@@ -69,5 +72,6 @@ export const makeSessionService = (di) => {
     createLoginSession,
     createPasswordSession,
     replacePasswordSession,
+    invalidateSession,
   };
 };

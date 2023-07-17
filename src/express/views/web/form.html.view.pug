@@ -1,12 +1,15 @@
 extends html.layout.pug 
 
+block scripts 
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js")
+  script(src="/js/formHandling.js" type="")
+
 block content
   h3=formTitle
 
-  each error of formErrors || []
-    .error=error
-
-  form(action=action method="post")
+  .successContainer
+  form#mainForm(action="")
+    .errorContainer
     .formGrid
       each input of inputs || []
         if input.type === 'hidden'
@@ -17,14 +20,17 @@ block content
             value=input.value
           )
         else
+
+          .formattingPlaceholder
+          .errorContainer(data-field=input.name+"Errors")
+
           label(for=input.name) #{titleize(input.name)}:
-          .formItem
-            each error of input.errors || []
-              .error=error
-            input(
-              type=input.type 
-              id=input.name 
-              name=camelize(input.name)
-              value=input.value
-            )
-      input.submit(type="submit" value=submitLabel)
+          input(
+            type=input.type 
+            id=input.name 
+            name=camelize(input.name)
+            value=input.value
+            autocomplete=input.autocomplete
+          )
+
+    input.submit(type="submit" value=submitLabel)

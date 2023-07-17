@@ -146,6 +146,7 @@ describe('GET /validate, fail', () => {
 
   });
   // issues:
+  //    • token has expired
   //    • no email in db for token
   //    • email can't be updated (race/lock/ref)
   // user already exists:
